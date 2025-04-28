@@ -1,20 +1,37 @@
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-metadata:
-  name: cafe-app
-  namespace: default
-spec:
-  interval: 10m
-  resources:
-    - cafe_app_db_deployment.yaml
-    - cafe_app_web_deployment.yaml
-    - cafe_app_web_service.yaml
-    - cafe_app_db_service.yaml
-    - cafe_app_pv.yaml        # If this file exists and is required for your PV
-    - mysql-pvc.yaml          # Assuming it's needed for PVC
-    - mysql-pv.yaml           # Assuming it's needed for the PersistentVolume
-    - mysql-pass.yaml         # Assuming this secret is needed for the password
-  commonLabels:
-    app: cafeapp
-  validation: client
-  prune: true
+
+namespace: default  # You can change this to the namespace you want to use
+resources:
+  - cafe_app_db_deployment.yaml
+  - cafe_app_web_deployment.yaml
+  - cafe_app_web_service.yaml
+  - cafe_app_db_service.yaml
+  - cafe_app_pv.yaml
+  - mysql-pvc.yaml
+  - mysql-pv.yaml
+  - mysql-pass.yaml
+
+patchesStrategicMerge:
+  # If you need to apply any specific patches to your deployments or other resources, you can add them here
+  # - patch-deployment.yaml
+  # - patch-replicas.yaml
+
+configMapGenerator:
+  - name: cafeapp-config-prod
+    literals:
+      - showServerInfo=false
+      - timeZone=America/New_York
+      - currency=$
+      - db_url=10.32.0.7  # Make sure this is the correct DB URL for your app
+      - db_name=mom_pop_db
+      - db_user=root
+      - db_password=Msois@123  # You should handle this securely in a real-world scenario
+
+# Optionally, if you want to add labels, common annotations, or other configurations
+commonLabels:
+  app: cafeapp
+
+# Prune will automatically delete resources that are no longer in the Kustomization
+prune: true
+
