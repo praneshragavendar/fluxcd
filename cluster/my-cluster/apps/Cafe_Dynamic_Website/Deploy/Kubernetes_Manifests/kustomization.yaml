@@ -32,6 +32,5 @@ configMapGenerator:
 commonLabels:
   app: cafeapp
 
-# Prune will automatically delete resources that are no longer in the Kustomization
-prune: true
+
 
