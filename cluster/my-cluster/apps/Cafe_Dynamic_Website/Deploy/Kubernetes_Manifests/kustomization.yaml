@@ -8,8 +8,8 @@ resources:
   - cafe_app_web_service.yaml
   - cafe_app_db_service.yaml
   - cafe_app_pv.yaml
-  - mysql-pvc.yaml
-  - mysql-pv.yaml
+  - mysql_pvc.yaml
+  - mysql_pv.yaml
   - mysql-pass.yaml
 
 patchesStrategicMerge:
