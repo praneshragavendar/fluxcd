@@ -1,0 +1,29 @@
+# gotk-components.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flux
+  template:
+    metadata:
+      labels:
+        app: flux
+    spec:
+      containers:
+      - name: flux
+        image: fluxcd/flux:latest
+        ports:
+        - containerPort: 3030
+        volumeMounts:
+        - name: fluxd-config
+          mountPath: /etc/fluxd
+          readOnly: true
+      volumes:
+      - name: fluxd-config
+        configMap:
+          name: fluxd-config
