@@ -1,0 +1,20 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: cafe-app
+  namespace: default
+spec:
+  interval: 10m
+  resources:
+    - cafe_app_db_deployment.yaml
+    - cafe_app_web_deployment.yaml
+    - cafe_app_web_service.yaml
+    - cafe_app_db_service.yaml
+    - cafe_app_pv.yaml        # If this file exists and is required for your PV
+    - mysql-pvc.yaml          # Assuming it's needed for PVC
+    - mysql-pv.yaml           # Assuming it's needed for the PersistentVolume
+    - mysql-pass.yaml         # Assuming this secret is needed for the password
+  commonLabels:
+    app: cafeapp
+  validation: client
+  prune: true
